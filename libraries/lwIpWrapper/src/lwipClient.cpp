@@ -126,19 +126,36 @@ size_t lwipClient::write(const uint8_t* buf, size_t size)
                 bytes_left = size - bytes_sent;
             } else if (res != ERR_MEM) {
                 // other error, cannot continue
-                return 0;
+                return bytes_sent;
             }
         }
 
         // Force to send data right now!
         if (ERR_OK != tcp_output(_tcp_client->pcb)) {
-            return 0;
+            return bytes_sent;
         }
         CLwipIf::getInstance().lwip_task();
 
     } while (bytes_sent != size);
 
     return size;
+}
+
+/* -------------------------------------------------------------------------- */
+int lwipClient::availableForWrite()
+{
+    /* -------------------------------------------------------------------------- */
+    CLwipIf::getInstance().lwip_task();
+    if ((_tcp_client == NULL) || (_tcp_client->pcb == NULL)) {
+        return 0;
+    }
+    /* If client not connected or accepted, it can't write because connection is
+    not ready */
+    if ((_tcp_client->state != TCP_ACCEPTED) && (_tcp_client->state != TCP_CONNECTED)) {
+        return 0;
+    }
+
+    return tcp_sndbuf(_tcp_client->pcb);
 }
 
 /* -------------------------------------------------------------------------- */
