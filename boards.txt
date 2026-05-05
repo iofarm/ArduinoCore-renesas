@@ -29,7 +29,7 @@ portenta_c33.compiler.fsp.cxxflags=-mthumb "@{compiler.fsp.defines}" -DLWIP_DNS=
 portenta_c33.compiler.tinyusb.cflags=-DCFG_TUSB_MCU=OPT_MCU_RAXXX
 portenta_c33.compiler.tinyusb.cxxflags=-DCFG_TUSB_MCU=OPT_MCU_RAXXX
 portenta_c33.compiler.fsp.includes={build.variant.path}/includes.txt
-portenta_c33.compiler.fsp.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
+portenta_c33.compiler.fsp.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys -L{runtime.platform.path}/libraries/lwIpWrapper/src/cortex-m33 -llwIP
 portenta_c33.compiler.fsp="{build.variant.path}/libs/libfsp.a"
 
 portenta_c33.upload.tool=dfu-util
